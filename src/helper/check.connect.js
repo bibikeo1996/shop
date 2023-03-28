@@ -17,7 +17,9 @@ const checkOverLoad = () => {
         const numCores = os.cpus().length;
         const memoryUsage = process.memoryUsage().rss;
         const maxConnections = (numCores*5)-10;
-        // Should be set limit around < 10 unit then when the connect overload will have time for Admin to check and have a solution
+        /*Should be set limit around < 10 unit then when the 
+        connect overload will have time for Admin to check and have a solution
+        */
 
         console.log(`Active connections:: ${numConnnection}`);
         console.log(`Memory usage:: ${memoryUsage/1024/1024} MB`);
