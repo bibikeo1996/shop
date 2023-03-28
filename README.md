@@ -21,12 +21,12 @@ toucn src/app.js => create file app inside src folder
 
 
 Required package: npm install 
-npm i express --save
-npm i morgan --save-dev  => write log every single user run a request
-npm i helmet --save-dev
-npm i compression --save-dev 
-npm i dotenv
-npm i bcrypt --save
-npm i crypto --save => to create privateKey, publishKey
-npm i jsonwebtoken --save
-npm i lodash --save
++ npm i express --save
++ npm i morgan --save-dev  => write log every single user run a request
++ npm i helmet --save-dev
++ npm i compression --save-dev 
++ npm i dotenv
++ npm i bcrypt --save
++ npm i crypto --save => to create privateKey, publishKey
++ npm i jsonwebtoken --save
++ npm i lodash --save
