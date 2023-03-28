@@ -1,5 +1,5 @@
 'use strict'
-
+// Check API authorize 
 const { findByID } = require("../services/apiKey.services");
 
 const HEADER = {
