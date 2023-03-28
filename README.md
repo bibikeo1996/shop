@@ -36,3 +36,9 @@ Required package: npm install
 + npm i crypto --save => to create privateKey, publishKey
 + npm i jsonwebtoken --save
 + npm i lodash --save
+
+Extension for VS Code
++ Beautify
++ Dracula official
++ REST Client
++ gitignore
