@@ -1,1 +1,0 @@
-model dùng để chứa các field trong database(mongodb)

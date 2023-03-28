@@ -52,8 +52,6 @@ class AccessServices{
                 // created token pair
                 const tokens = await createTokenPair({userId: newShop._id, email}, publicKey, privateKey);
 
-                // console.log(`Created Token Success:: ` + tokens);
-
                 return {
                     code: 201,
                     metadata: {
@@ -61,7 +59,7 @@ class AccessServices{
                         tokens
                     }
                 }
-                //const tokens = await 
+
             }
 
             return {
@@ -69,10 +67,10 @@ class AccessServices{
                 metadata: null
             }
         }catch(err){
-            console.error(err);
+            console.error(err +" Access services file");
             return{
                 code: 404,
-                message: err.message +" Access services file",
+                message: err.message,
                 status: 'error'
             }
         }
