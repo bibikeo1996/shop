@@ -1,12 +1,11 @@
 Personal Project - Shop
 
 CMD line: 
- touch server.js => Create new server file
- npm init -y => Create package json
- curl http://localhost:3000 --include => check all header information
++ touch server.js => Create new server file
++ npm init -y => Create package json
++ curl http://localhost:3000 --include => check all header information
 
-Folder
-=> src
+Folder structure
 + controller
 + models
 + services
