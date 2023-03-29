@@ -10,6 +10,7 @@ const {
 const {
     getInforData
 } = require("../utils");
+const { BadRequestError } = require("../core/error.response");
 
 const RoleShop = {
     SHOP: '01',
@@ -24,74 +25,61 @@ class AccessServices {
         email,
         password
     }) => {
-        try {
-            // step1: check email exists
-            const holderShop = await shopModel.findOne({
+
+        // step1: check email exists
+        const holderShop = await shopModel.findOne({
+            email
+        }).lean();
+
+        if (holderShop) {
+            throw new BadRequestError('Email already registered!(Access services)');
+        }
+
+        const passwordHash = await bcrypt.hash(password, 10); // 2 variable 1 password and dificulty level
+        const newShop = await shopModel.create({
+            name,
+            email,
+            password: passwordHash,
+            roles: [RoleShop.SHOP]
+        })
+
+        if (newShop) {
+            // create privateKey, publicKey
+            const privateKey = crypto.randomBytes(64).toString('hex');
+            const publicKey = crypto.randomBytes(64).toString('hex');
+
+            const keyStorage = await KeyTokenServices.createKeyToken({
+                userId: newShop._id,
+                publicKey,
+                privateKey
+            });
+
+            if (!keyStorage) {
+                throw new BadRequestError('Keystorage Error(Access services)');
+            }
+
+            // created token pair
+            const tokens = await createTokenPair({
+                userId: newShop._id,
                 email
-            }).lean();
-            if (holderShop) {
-                return {
-                    code: 409,
-                    message: 'Email already registered!(Access services)'
-                }
-            }
-
-            const passwordHash = await bcrypt.hash(password, 10); // 2 variable 1 password and dificulty level
-            const newShop = await shopModel.create({
-                name,
-                email,
-                password: passwordHash,
-                roles: [RoleShop.SHOP]
-            })
-
-            if (newShop) {
-                // create privateKey, publicKey
-                const privateKey = crypto.randomBytes(64).toString('hex');
-                const publicKey = crypto.randomBytes(64).toString('hex');
-
-                const keyStorage = await KeyTokenServices.createKeyToken({
-                    userId: newShop._id,
-                    publicKey,
-                    privateKey
-                });
-
-                if (!keyStorage) {
-                    return {
-                        code: 409,
-                        message: 'keyStorage error(Access services)'
-                    }
-                }
-
-                // created token pair
-                const tokens = await createTokenPair({
-                    userId: newShop._id,
-                    email
-                }, publicKey, privateKey);
-
-                return {
-                    code: 201,
-                    metadata: {
-                        shop: getInforData({
-                            fields: ['_id', 'name', 'email'],
-                            object: newShop
-                        }),
-                        tokens
-                    }
-                }
-
-            }
+            }, publicKey, privateKey);
 
             return {
-                code: 200,
-                metadata: null
+                code: 201,
+                metadata: {
+                    shop: getInforData({
+                        fields: ['_id', 'name', 'email'],
+                        object: newShop
+                    }),
+                    tokens
+                }
             }
-        } catch (err) {
-            console.error(err + " Access services file");
-            return {
-                code: 404,
-                message: err.message,
-                status: 'error'
-            }
+
+        }
+
+        return {
+            code: 200,
+            metadata: null
         }
     }
 }
